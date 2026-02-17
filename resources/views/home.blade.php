@@ -1,64 +1,97 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Login - Admin</title>
+
+    {{-- CSS --}}
+    <link rel="stylesheet" href="{{ asset('assets/vendors/mdi/css/materialdesignicons.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendors/ti-icons/css/themify-icons.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendors/css/vendor.bundle.base.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendors/font-awesome/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.png') }}" />
 </head>
+
 <body>
+<div class="container-scroller">
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+        <div class="content-wrapper d-flex align-items-center auth">
+            <div class="row flex-grow">
+                <div class="col-lg-4 mx-auto">
 
-    <h2>Login</h2>
+                    <div class="auth-form-light text-left p-5">
 
-    {{-- SUCCESS MESSAGE --}}
-    @if(session('success'))
-        <div>
-            {{ session('success') }}
+                        <div class="brand-logo text-center">
+                            <img src="{{ asset('assets/images/logo.svg') }}">
+                        </div>
+
+                        <h4>Hello! let's get started</h4>
+                        <h6 class="font-weight-light">Sign in to continue.</h6>
+
+                        {{-- SUCCESS MESSAGE --}}
+                        @if(session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+
+                        {{-- ERROR GLOBAL --}}
+                        @if($errors->any())
+                            <div class="alert alert-danger">
+                                <ul class="mb-0">
+                                    @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        {{-- FORM LOGIN --}}
+                        <form method="POST" action="{{ route('login') }}" class="pt-3">
+                            @csrf
+
+                            <div class="form-group">
+                                <input type="text"
+                                       name="username"
+                                       value="{{ old('username') }}"
+                                       class="form-control form-control-lg"
+                                       placeholder="Username"
+                                       required>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="password"
+                                       name="password"
+                                       class="form-control form-control-lg"
+                                       placeholder="Password"
+                                       required>
+                            </div>
+
+                            <div class="mt-3 d-grid gap-2">
+                                <button type="submit"
+                                        class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn">
+                                    LOGIN
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
         </div>
-    @endif
+    </div>
+</div>
 
-    {{-- ERROR GLOBAL --}}
-    @if($errors->any())
-        <div>
-            <ul>
-                @foreach($errors->all() as $error)
-                    <li style="color:red;">{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    {{-- FORM LOGIN --}}
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
-
-        <div>
-            <label>Username</label><br>
-            <input 
-                type="text" 
-                name="username" 
-                value="{{ old('username') }}" 
-                required
-            >
-        </div>
-
-        <br>
-
-        <div>
-            <label>Password</label><br>
-            <input 
-                type="password" 
-                name="password" 
-                required
-            >
-        </div>
-
-        <br>
-
-        <button type="submit">
-            Login
-        </button>
-
-    </form>
+{{-- JS --}}
+<script src="{{ asset('assets/vendors/js/vendor.bundle.base.js') }}"></script>
+<script src="{{ asset('assets/js/off-canvas.js') }}"></script>
+<script src="{{ asset('assets/js/misc.js') }}"></script>
+<script src="{{ asset('assets/js/settings.js') }}"></script>
+<script src="{{ asset('assets/js/todolist.js') }}"></script>
+<script src="{{ asset('assets/js/jquery.cookie.js') }}"></script>
 
 </body>
 </html>

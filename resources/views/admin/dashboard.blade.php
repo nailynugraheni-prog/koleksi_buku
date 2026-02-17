@@ -1,94 +1,129 @@
 @extends('layouts.app')
 
 @section('title','Dashboard Admin')
-@section('page-title','Dashboard Admin')
-
-@push('page-style')
-<style>
-  /* style sederhana khusus halaman dashboard */
-  #stats { display:flex; gap:1rem; margin-bottom:1.5rem; }
-  .stat { background:#fff; padding:1rem; border-radius:8px; box-shadow:0 1px 2px rgba(0,0,0,0.04); min-width:120px; }
-  table.table { background:#fff; border-radius:6px; overflow:hidden; }
-</style>
-@endpush
 
 @section('content')
-  <h1 class="mb-3">Dashboard Admin</h1>
 
-  <section id="stats" class="mb-4">
-    <div class="stat">
-      <strong>Users</strong>
-      <div>{{ $counts['users'] }}</div>
-    </div>
-    <div class="stat">
-      <strong>Roles</strong>
-      <div>{{ $counts['roles'] }}</div>
-    </div>
-    <div class="stat">
-      <strong>Kategori</strong>
-      <div>{{ $counts['kategori'] }}</div>
-    </div>
-    <div class="stat">
-      <strong>Buku</strong>
-      <div>{{ $counts['buku'] }}</div>
-    </div>
-  </section>
+<div class="page-header">
+    <h1 class="mb-0">Dashboard Admin</h1>
+    <small class="text-muted">Ringkasan Sistem</small>
+</div>
 
-  <section id="latest-books" class="mb-4">
-    <h2>Buku Terbaru</h2>
-    <div class="table-responsive">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Kode</th>
-            <th>Judul</th>
-            <th>Pengarang</th>
-            <th>Kategori</th>
-            <th>Pembuat</th>
-          </tr>
-        </thead>
-        <tbody>
-          @forelse($latestBooks as $b)
-            <tr>
-              <td>{{ $b->kode }}</td>
-              <td>{{ $b->judul }}</td>
-              <td>{{ $b->pengarang }}</td>
-              <td>{{ $b->kategori }}</td>
-              <td>{{ $b->creator }}</td>
-            </tr>
-          @empty
-            <tr><td colspan="5">Belum ada data</td></tr>
-          @endforelse
-        </tbody>
-      </table>
-    </div>
-  </section>
 
-  <section id="top-kategori">
-    <h2>Top Kategori</h2>
-    <div class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr><th>Kategori</th><th>Total</th></tr>
-        </thead>
-        <tbody>
-          @forelse($topKategori as $k)
-            <tr>
-              <td>{{ $k->nama_kategori }}</td>
-              <td>{{ $k->total }}</td>
-            </tr>
-          @empty
-            <tr><td colspan="2">Belum ada data</td></tr>
-          @endforelse
-        </tbody>
-      </table>
+<div class="row mb-4">
+
+    <div class="col-md-3 mb-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <h6 class="text-muted">Users</h6>
+                <h3 class="mb-0">{{ $counts['users'] ?? 0 }}</h3>
+            </div>
+        </div>
     </div>
-  </section>
+
+    <div class="col-md-3 mb-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <h6 class="text-muted">Roles</h6>
+                <h3 class="mb-0">{{ $counts['roles'] ?? 0 }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <h6 class="text-muted">Kategori</h6>
+                <h3 class="mb-0">{{ $counts['kategori'] ?? 0 }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <h6 class="text-muted">Buku</h6>
+                <h3 class="mb-0">{{ $counts['buku'] ?? 0 }}</h3>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="mb-0">Buku Terbaru</h5>
+    </div>
+
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Kode</th>
+                        <th>Judul</th>
+                        <th>Pengarang</th>
+                        <th>Kategori</th>
+                        <th>Dibuat Oleh</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($latestBooks as $b)
+                        <tr>
+                            <td>{{ $b->kode }}</td>
+                            <td>{{ $b->judul }}</td>
+                            <td>{{ $b->pengarang }}</td>
+                            <td>{{ $b->kategori }}</td>
+                            <td>{{ $b->creator }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center py-4">
+                                Belum ada data
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Top Kategori</h5>
+    </div>
+
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Kategori</th>
+                        <th>Total Buku</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($topKategori as $k)
+                        <tr>
+                            <td>{{ $k->nama_kategori }}</td>
+                            <td>{{ $k->total }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="2" class="text-center py-4">
+                                Belum ada data
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 @endsection
-
-@push('page-js')
-<script>
-  // Contoh: inisialisasi chart jika mau pakai chart untuk statistik
-  console.log('Dashboard ready');
-</script>
-@endpush
