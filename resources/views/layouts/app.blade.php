@@ -7,7 +7,6 @@
   {{-- Global CSS (vendors, layout) --}}
   @include('partials._style-global')
 
-  {{-- page-specific styles (support dua nama stack) --}}
   @stack('style-page')
   @stack('page-style')
 </head>
@@ -31,7 +30,6 @@
   {{-- Global JS --}}
   @include('partials._scripts-global')
 
-  {{-- page-specific scripts (support dua nama stack) --}}
   @stack('script-page')
   @stack('page-js')
 </body>

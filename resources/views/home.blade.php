@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Login - Admin</title>
+    <title>Login</title>
 
     {{-- CSS --}}
     <link rel="stylesheet" href="{{ asset('assets/vendors/mdi/css/materialdesignicons.min.css') }}">
@@ -12,6 +12,29 @@
     <link rel="stylesheet" href="{{ asset('assets/vendors/font-awesome/css/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link rel="shortcut icon" href="{{ asset('assets/images/favicon.png') }}" />
+
+    <!-- small local fixes in case style.css overrides bootstrap util -->
+    <style>
+      /* hanya mempengaruhi form auth ini supaya tombol selalu full-width */
+      .auth-form-light .d-grid .btn,
+      .auth-form-light .btn-auth-full {
+        display: block;
+        width: 100%;
+      }
+
+      /* beri jarak antar tombol jika ada dua tombol vertikal */
+      .auth-form-light .d-grid .btn + .btn,
+      .auth-form-light .btn-auth-full + .btn-auth-full {
+        margin-top: 0.5rem;
+      }
+
+      /* jika ingin tampilan tombol Google sedikit beda (opsional) */
+      .btn-google {
+        background: #f76b7b;          /* atau gunakan kelas btn-danger jika mau */
+        border: none;
+        color: #fff;
+      }
+    </style>
 </head>
 
 <body>
@@ -69,11 +92,19 @@
                                        required>
                             </div>
 
+                            <!-- kedua tombol berada di sini, full-width dan ada gap -->
                             <div class="mt-3 d-grid gap-2">
                                 <button type="submit"
                                         class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn">
                                     LOGIN
                                 </button>
+
+                                <!-- jadikan <a> ini full-width juga dengan class tambahan -->
+                                <a href="{{ route('google.redirect') }}"
+                                   class="btn btn-google btn-lg font-weight-medium btn-auth-full"
+                                   role="button">
+                                   Login with Google
+                                </a>
                             </div>
                         </form>
 

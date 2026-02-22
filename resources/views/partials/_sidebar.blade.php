@@ -7,7 +7,7 @@
           <span class="login-status online"></span>
         </div>
         <div class="nav-profile-text d-flex flex-column">
-          <span class="font-weight-bold mb-2">David Grey. H</span>
+          <span class="font-weight-bold mb-2">{{ auth()->user()->name ?? session('user_name') ?? 'Guest' }}</span>
           <span class="text-secondary text-small">Project Manager</span>
         </div>
         <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>

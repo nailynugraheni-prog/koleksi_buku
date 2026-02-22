@@ -14,8 +14,14 @@ return [
     |
     */
 
+    'mailgun' => [
+        'domain' => env('MAILGUN_DOMAIN'),
+        'secret' => env('MAILGUN_SECRET'),
+        'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
+    ],
+
     'postmark' => [
-        'key' => env('POSTMARK_API_KEY'),
+        'token' => env('POSTMARK_API_TOKEN'),
     ],
 
     'resend' => [
@@ -28,6 +34,15 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    // --- GOOGLE OAUTH (Socialite) ---
+    'google' => [
+        'client_id'     => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        // gunakan ENV yang sama dg .env: GOOGLE_REDIRECT_URI
+        // fallback ke APP_URL jika GOOGLE_REDIRECT_URI tidak di-set (opsional)
+        'redirect'      => env('GOOGLE_REDIRECT_URI', env('APP_URL') . '/auth/google/callback'),
+    ],
+
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),
@@ -35,4 +50,5 @@ return [
         ],
     ],
 
+    // tambahkan service lain bila perlu...
 ];

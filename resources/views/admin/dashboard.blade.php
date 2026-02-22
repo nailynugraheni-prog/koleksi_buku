@@ -9,6 +9,17 @@
     <small class="text-muted">Ringkasan Sistem</small>
 </div>
 
+<div class="mb-3 d-flex flex-wrap align-items-center">
+    <a href="{{ route('admin.dashboard.certificatePdf') }}" target="_blank"
+       class="btn btn-success me-2" style="width:auto; display:inline-block;">
+        Cetak Sertifikat (PDF)
+    </a>
+
+    <a href="{{ route('admin.dashboard.pdf') }}" target="_blank"
+       class="btn btn-primary" style="width:auto; display:inline-block;">
+        Cetak Dashboard (PDF)
+    </a>
+</div>
 
 <div class="row mb-4">
 
