@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Sertifikat</title>
+    <title>Sertifikat 2</title>
     <style>
         @page {
             margin: 40px;
@@ -48,7 +48,7 @@
     <h1>SERTIFIKAT</h1>
     <div class="subtitle">Diberikan kepada</div>
 
-    <div class="name">{{ trim($user->name ?? $user->username ?? 'Nama Pengguna') }}</div>
+    <div class="name"> Naily Nugraheni </div>
 
         <div class="role">Peran / Role: {{ $roleName }}</div>
 

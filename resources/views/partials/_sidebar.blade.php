@@ -36,6 +36,13 @@
         <i class="mdi mdi-shape menu-icon"></i>
       </a>
     </li>
+
+    <li class="nav-item">
+      <a class="nav-link {{ Request::is('admin/barang*') ? 'active' : '' }}" href="{{ url('admin/barang') }}">
+        <span class="menu-title">Barang</span>
+        <i class="mdi mdi-package-variant menu-icon"></i>
+      </a>
+    </li>
       </a>
     </li>
   </ul>

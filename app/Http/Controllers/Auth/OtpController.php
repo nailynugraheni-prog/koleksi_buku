@@ -20,6 +20,36 @@ class OtpController extends Controller
         return view('auth.otp'); // buat view di resources/views/auth/otp.blade.php
     }
 
+    public function sendToAuthenticated(Request $request)
+{
+    $user = $request->user();
+    if (! $user) {
+        return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
+    }
+
+    // Rate limit sederhana: max 3 kirim per 15 menit
+    $resendKey = 'otp_resend_'.$user->iduser;
+    $resendCount = Cache::get($resendKey, 0);
+    if ($resendCount >= 3) {
+        return back()->with('error', 'Melebihi batas kirim ulang. Coba nanti.');
+    }
+
+    // Generate OTP 6 digit
+    $otp = random_int(100000, 999999);
+    $user->otp = (string)$otp;
+    $user->save();
+
+    // Simpan expiry & attempts
+    Cache::put('otp_expiry_'.$user->iduser, now()->addMinutes(10), now()->addMinutes(10));
+    Cache::put('otp_attempts_'.$user->iduser, 0, now()->addMinutes(10));
+    Cache::put($resendKey, $resendCount + 1, now()->addMinutes(15));
+
+    // Kirim email (sinkron). Jika sudah punya queue, gunakan ->queue(...)
+    Mail::to($user->email)->send(new \App\Mail\SendOtpMail($otp));
+
+    return back()->with('info', 'OTP telah dikirim ke email Anda.');
+}
+
     public function verify(Request $request)
     {
         $request->validate(['otp' => 'required|digits:6']);
