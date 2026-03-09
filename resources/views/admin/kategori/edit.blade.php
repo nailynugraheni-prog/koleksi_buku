@@ -8,7 +8,7 @@
     <a href="{{ route('admin.kategori.index') }}" class="btn btn-secondary">Kembali</a>
   </div>
 
-  {{-- Errors --}}
+  {{-- Errors (server-side) --}}
   @if($errors->any())
     <div class="alert alert-danger">
       <ul class="mb-0">
@@ -21,7 +21,7 @@
 
   <div class="card">
     <div class="card-body">
-      <form action="{{ route('admin.kategori.update', $kategori->idkategori) }}" method="POST" novalidate>
+      <form id="editKategoriForm" action="{{ route('admin.kategori.update', $kategori->idkategori) }}" method="POST" novalidate>
         @csrf
         @method('PUT')
 
@@ -43,11 +43,32 @@
           @endif
         </div>
 
-        <div class="d-flex gap-2">
-          <button type="submit" class="btn btn-primary">Update</button>
-          <a href="{{ route('admin.kategori.index') }}" class="btn btn-outline-secondary">Batal</a>
-        </div>
+        {{-- tempat pesan error/invalid (client-side) --}}
+        <div id="formAlert" class="alert alert-warning d-none" role="alert" aria-live="polite"></div>
+
+        {{-- noscript fallback --}}
+        <noscript>
+          <div class="mt-3">
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a href="{{ route('admin.kategori.index') }}" class="btn btn-secondary">Batal</a>
+          </div>
+        </noscript>
       </form>
+
+      {{-- tombol di luar form (dikelola form-global.js) --}}
+      <div class="d-flex gap-2 mt-3">
+        <button
+          type="button"
+          class="btn btn-primary js-external-submit"
+          data-target="#editKategoriForm"
+          data-default-text="Update"
+          data-busy-text="Menyimpan...">
+          <span class="spinner-border spinner-border-sm me-2 btn-spinner d-none" role="status" aria-hidden="true"></span>
+          <span class="btn-text">Update</span>
+        </button>
+
+        <a href="{{ route('admin.kategori.index') }}" class="btn btn-secondary">Batal</a>
+      </div>
     </div>
   </div>
 @endsection

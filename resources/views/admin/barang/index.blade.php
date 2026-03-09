@@ -99,13 +99,6 @@
           </tbody>
         </table>
       </div>
-
-
-      {{-- Jika kamu masih memakai server-side paginate (controller->paginate),
-           pertahankan link paginasi. Jika pakai DataTables client-side, links bisa disembunyikan. --}}
-      <div class="mt-3">
-        {{ $barangs->links() }}
-      </div>
     </div>
   </div>
 @endsection

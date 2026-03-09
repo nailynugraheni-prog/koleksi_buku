@@ -68,6 +68,20 @@ Route::middleware(['auth', IsAdmin::class])
         Route::put('/barang/update/{id}', [BarangController::class, 'update'])->name('barang.update');
         Route::delete('/barang/delete/{id}', [BarangController::class, 'destroy'])->name('barang.delete');
 
+        // tambahan: halaman latihan (tidak menyimpan ke DB) - versi HTML biasa & DataTables
+        Route::get('/barang-biasa', function () {
+            return view('admin.form_biasa'); // resources/views/admin/form_biasa.blade.php
+        })->name('barang.biasa');
+
+        Route::get('/barang-datatables', function () {
+            return view('admin.form_datatable'); // resources/views/admin/form_datatable.blade.php
+        })->name('barang.datatables');
+
+        // Halaman latihan: Manage Kota (tidak butuh controller, hanya view)
+        Route::get('/cities', function () {
+            return view('admin.cities'); // resources/views/admin/cities.blade.php
+        })->name('cities');
+
         Route::post('/barang/print-labels', [BarangController::class, 'printLabels'])->name('barang.printLabels');
 
         // generate kode buku berdasarkan kategori

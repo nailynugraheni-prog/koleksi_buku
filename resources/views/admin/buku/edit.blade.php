@@ -21,12 +21,12 @@
 <div class="card">
 <div class="card-body">
 
-<form action="{{ route('admin.buku.update', $buku->idbuku) }}" method="POST">
+<form id="editBukuForm" action="{{ route('admin.buku.update', $buku->idbuku) }}" method="POST" novalidate>
 @csrf
 @method('PUT')
 
 <div class="mb-3">
-    <label class="form-label">Kategori</label>
+    <label class="form-label" for="idkategori">Kategori</label>
     <select name="idkategori" id="idkategori" class="form-control" required>
         @foreach($kategoris as $k)
             <option value="{{ $k->idkategori }}"
@@ -38,7 +38,7 @@
 </div>
 
 <div class="mb-3">
-    <label class="form-label">Kode</label>
+    <label class="form-label" for="kode">Kode</label>
     <input type="text" name="kode" id="kode"
         class="form-control"
         value="{{ $buku->kode }}"
@@ -46,48 +46,72 @@
 </div>
 
 <div class="mb-3">
-    <label class="form-label">Judul</label>
+    <label class="form-label" for="judul">Judul</label>
     <input type="text" name="judul"
+        id="judul"
         class="form-control"
         value="{{ old('judul', $buku->judul) }}"
         required>
 </div>
 
 <div class="mb-3">
-    <label class="form-label">Pengarang</label>
-    <input type="text" name="pengarang"
+    <label class="form-label" for="pengarang">Pengarang</label>
+    <input type="text"
+        name="pengarang"
+        id="pengarang"
         class="form-control"
         value="{{ old('pengarang', $buku->pengarang) }}"
         required>
 </div>
 
+<div id="formAlert" class="alert alert-warning d-none" role="alert" aria-live="polite"></div>
+
+<noscript>
+<div class="mt-3">
 <button type="submit" class="btn btn-primary">Update</button>
-<a href="{{ route('admin.buku.index') }}" class="btn btn-secondary">Kembali</a>
+</div>
+</noscript>
 
 </form>
 
+<div class="d-flex gap-2 mt-3">
+
+<button
+type="button"
+class="btn btn-primary js-external-submit"
+data-target="#editBukuForm"
+data-default-text="Update"
+data-busy-text="Menyimpan...">
+
+<span class="spinner-border spinner-border-sm me-2 btn-spinner d-none"></span>
+<span class="btn-text">Update</span>
+
+</button>
+
+<a href="{{ route('admin.buku.index') }}" class="btn btn-secondary">Kembali</a>
+
+</div>
+
 </div>
 </div>
 
-{{-- SCRIPT AUTO UPDATE KODE SAAT GANTI KATEGORI --}}
 <script>
-document.getElementById('idkategori').addEventListener('change', function() {
+document.getElementById('idkategori').addEventListener('change', function () {
 
-    let idkategori = this.value;
+let idkategori = this.value;
 
-    if (!idkategori) {
-        document.getElementById('kode').value = '';
-        return;
-    }
+if (!idkategori) {
+document.getElementById('kode').value = '';
+return;
+}
 
-    fetch(`/admin/buku/generate-kode/${idkategori}`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('kode').value = data.kode;
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+fetch(`/admin/buku/generate-kode/${idkategori}`)
+.then(response => response.json())
+.then(data => {
+document.getElementById('kode').value = data.kode;
+})
+.catch(error => console.error(error));
+
 });
 </script>
 

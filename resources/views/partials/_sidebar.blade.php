@@ -43,6 +43,28 @@
         <i class="mdi mdi-package-variant menu-icon"></i>
       </a>
     </li>
+
+    <li class="nav-item">
+      <a class="nav-link {{ Request::is('admin/barang-biasa*') ? 'active' : '' }}" href="{{ url('admin/barang-biasa') }}">
+        <span class="menu-title">Barang (HTML Biasa)</span>
+        <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link {{ Request::is('admin/barang-datatables*') ? 'active' : '' }}" href="{{ url('admin/barang-datatables') }}">
+        <span class="menu-title">Barang (DataTables)</span>
+        <i class="mdi mdi-table-large menu-icon"></i>
+      </a>
+    </li>
+
+     <li class="nav-item">
+      <a class="nav-link {{ Request::is('admin/cities*') ? 'active' : '' }}" href="{{ url('admin/cities') }}">
+        <span class="menu-title">Manage Kota</span>
+        <i class="mdi mdi-city menu-icon"></i>
+      </a>
+    </li>
+    
       </a>
     </li>
   </ul>

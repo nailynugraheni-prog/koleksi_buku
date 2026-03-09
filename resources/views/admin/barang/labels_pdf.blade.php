@@ -5,30 +5,51 @@
     <title>Labels PDF</title>
     <style>
         @page {
-            size: A4 landscape;
-            margin: 10mm 8mm 10mm 8mm;
+            margin: 0;
         }
+
         body {
-            font-family: DejaVu Sans, sans-serif;
-            font-size: 10pt;
+            margin: 0;
+            width: 210mm;
+            height: 167mm;
         }
-        .sheet {
-            width: 100%;
-        }
+
+        
         table {
-            width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 2mm 2mm; /* 0,3 cm samping | 0,2 cm bawah */
+            margin: 0 auto;
         }
-        td.label-cell {
-            width: 20%;
-            height: 34mm;
-            vertical-align: top;
-            padding: 2mm 3mm;
-            
+
+        td {
+            width: 38mm;   /* 3,8 cm */
+            height: 18mm;  /* 1,8 cm */
+            background: #ffffff; /* label putih */
+            border: 0.3 px solid #000; /* border per label */
+            border-radius: 10px; /* lengkungan */
+            text-align: center;
+            vertical-align: middle;
         }
-        .item-name { font-weight: bold; font-size: 10pt; }
-        .item-price { font-size: 9pt; margin-top:6px; }
-        .page-break { page-break-after: always; }
+
+       
+        .nama {
+            font-size: 7pt;
+            font-weight: bold;
+            line-height: 1.1;
+        }
+
+        .kode {
+            font-size: 6pt;
+        }
+
+        .harga {
+            font-size: 9pt;
+            font-weight: bold;
+        }
+
+        .footer {
+            font-size: 5pt;
+        }
     </style>
 </head>
 <body>

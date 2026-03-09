@@ -21,24 +21,48 @@
 <div class="card">
   <div class="card-body">
 
-    <form action="{{ route('admin.barang.store') }}" method="POST">
+    {{-- Form: tombol SUBMIT DI LUAR form (sesuai soal) --}}
+    <form id="createBarangForm" action="{{ route('admin.barang.store') }}" method="POST" novalidate>
       @csrf
 
       <div class="mb-3">
-        <label class="form-label">Nama</label>
-        <input type="text" name="nama" class="form-control" maxlength="50"
+        <label class="form-label" for="nama">Nama</label>
+        <input id="nama" type="text" name="nama" class="form-control" maxlength="50"
                value="{{ old('nama') }}" required>
       </div>
 
       <div class="mb-3">
-        <label class="form-label">Harga</label>
-        <input type="number" name="harga" class="form-control" min="0"
+        <label class="form-label" for="harga">Harga</label>
+        <input id="harga" type="number" name="harga" class="form-control" min="0"
                value="{{ old('harga') }}" required>
       </div>
 
-      <button type="submit" class="btn btn-primary">Simpan</button>
-      <a href="{{ route('admin.barang.index') }}" class="btn btn-secondary">Kembali</a>
+      {{-- tempat pesan error/invalid --}}
+      <div id="formAlert" class="alert alert-warning d-none" role="alert" aria-live="polite"></div>
+
+      {{-- fallback untuk pengguna tanpa JS --}}
+      <noscript>
+        <div class="mt-3">
+          <button type="submit" class="btn btn-primary">Simpan</button>
+        </div>
+      </noscript>
+
     </form>
+
+    {{-- TOMBOL DI LUAR FORM (dikelola oleh form-global.js) --}}
+    <div class="d-flex gap-2 mt-3">
+      <button
+        type="button"
+        class="btn btn-primary js-external-submit"
+        data-target="#createBarangForm"
+        data-default-text="Simpan"
+        data-busy-text="Menyimpan...">
+        <span class="spinner-border spinner-border-sm me-2 btn-spinner d-none" role="status" aria-hidden="true"></span>
+        <span class="btn-text">Simpan</span>
+      </button>
+
+      <a href="{{ route('admin.barang.index') }}" class="btn btn-secondary">Kembali</a>
+    </div>
 
   </div>
 </div>
