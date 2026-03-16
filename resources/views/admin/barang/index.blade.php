@@ -92,9 +92,14 @@
                 </td>
               </tr>
             @empty
-              <tr>
-                <td colspan="6" class="text-center py-4">Belum ada data</td>
-              </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td class="text-center py-4">Belum ada data</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
             @endforelse
           </tbody>
         </table>
