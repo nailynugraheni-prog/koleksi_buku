@@ -1,9 +1,22 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| AUTH CONTROLLERS
+|--------------------------------------------------------------------------
+*/
+
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Auth\OtpController;
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN CONTROLLERS
+|--------------------------------------------------------------------------
+*/
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\KategoriController;
@@ -12,7 +25,28 @@ use App\Http\Controllers\Admin\BukuController;
 use App\Http\Controllers\Admin\PenjualanController;
 use App\Http\Controllers\Admin\WilayahController;
 
+/*
+|--------------------------------------------------------------------------
+| VENDOR CONTROLLERS
+|--------------------------------------------------------------------------
+*/
+
+use App\Http\Controllers\Vendor\DashboardController as VendorDashboardController;
+use App\Http\Controllers\Vendor\MenuController;
+use App\Http\Controllers\Vendor\OrderController;
+
+use App\Http\Controllers\Customer\CustomerController;
+use App\Http\Controllers\Customer\PaymentController;
+
+
+/*
+|--------------------------------------------------------------------------
+| MIDDLEWARE
+|--------------------------------------------------------------------------
+*/
+
 use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\IsVendor;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,9 +101,7 @@ Route::middleware(['auth', IsAdmin::class])
         */
 
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
         Route::get('/dashboard/pdf', [DashboardController::class, 'dashboardPdf'])->name('dashboard.pdf');
-
         Route::get('/dashboard/certificate-pdf', [DashboardController::class, 'certificatePdf'])->name('dashboard.certificatePdf');
 
         /*
@@ -98,7 +130,6 @@ Route::middleware(['auth', IsAdmin::class])
         Route::put('/buku/update/{id}', [BukuController::class, 'update'])->name('buku.update');
         Route::delete('/buku/delete/{id}', [BukuController::class, 'destroy'])->name('buku.delete');
 
-        // generate kode buku
         Route::get('/buku/generate-kode/{idkategori}', [BukuController::class, 'generateKode'])
             ->name('buku.generateKode');
 
@@ -134,7 +165,6 @@ Route::middleware(['auth', IsAdmin::class])
         */
 
         Route::prefix('wilayah')->name('wilayah.')->group(function () {
-
             Route::get('/ajax', [WilayahController::class, 'ajax'])->name('ajax');
             Route::get('/axios', [WilayahController::class, 'axios'])->name('axios');
 
@@ -161,4 +191,62 @@ Route::middleware(['auth', IsAdmin::class])
         Route::get('/cities', function () {
             return view('admin.cities');
         })->name('cities');
+    });
+
+/*
+|--------------------------------------------------------------------------
+| VENDOR AREA
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', IsVendor::class])
+    ->prefix('vendor')
+    ->name('vendor.')
+    ->group(function () {
+
+        Route::get('/dashboard', [VendorDashboardController::class, 'index'])
+            ->name('dashboard');
+
+        Route::get('/menu', [MenuController::class, 'index'])
+            ->name('menu.index');
+
+        Route::get('/menu/create', [MenuController::class, 'create'])
+            ->name('menu.create');
+
+        Route::post('/menu/store', [MenuController::class, 'store'])
+            ->name('menu.store');
+
+        Route::get('/menu/edit/{id}', [MenuController::class, 'edit'])
+            ->name('menu.edit');
+
+        Route::put('/menu/update/{id}', [MenuController::class, 'update'])
+            ->name('menu.update');
+
+        Route::delete('/menu/delete/{id}', [MenuController::class, 'destroy'])
+            ->name('menu.destroy');
+
+        Route::get('/orders', [OrderController::class, 'index'])
+            ->name('orders.index');
+    });
+
+    /*
+|--------------------------------------------------------------------------
+| CUSTOMER AREA (GUEST)
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('customer')->name('customer.')->group(function () {
+    Route::get('/start', [CustomerController::class, 'startGuest'])->name('start');
+    Route::get('/dashboard', [CustomerController::class, 'dashboard'])->name('dashboard');
+
+    Route::post('/cart/add', [CustomerController::class, 'addToCart'])->name('cart.add');
+    Route::post('/cart/remove/{idmenu}', [CustomerController::class, 'removeFromCart'])->name('cart.remove');
+
+    Route::post('/cart/checkout', [PaymentController::class, 'checkout'])->name('cart.checkout');
+
+    Route::post('/midtrans/notification', [PaymentController::class, 'notification'])
+        ->name('midtrans.notification');
+
+    Route::get('/payment/success', [PaymentController::class, 'success'])
+        ->name('payment.success');
 });

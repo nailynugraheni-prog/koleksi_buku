@@ -105,6 +105,12 @@
                                    role="button">
                                    Login with Google
                                 </a>
+
+                                <a href="{{ route('customer.start') }}"
+                                class="btn btn-success btn-lg font-weight-medium btn-auth-full"
+                                role="button">
+                                Masuk Sebagai Customer
+                                </a>
                             </div>
                         </form>
 
