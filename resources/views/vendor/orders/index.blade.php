@@ -6,7 +6,13 @@
 
 <div class="container-fluid">
 
-    <h2 class="mb-4">Daftar Pesanan</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Daftar Pesanan</h2>
+
+        <a href="{{ route('vendor.orders.scan-qr') }}" class="btn btn-success">
+            Scan Barcode / QR
+        </a>
+    </div>
 
     <div class="row">
 

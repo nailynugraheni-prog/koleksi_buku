@@ -24,6 +24,8 @@ use App\Http\Controllers\Admin\BarangController;
 use App\Http\Controllers\Admin\BukuController;
 use App\Http\Controllers\Admin\PenjualanController;
 use App\Http\Controllers\Admin\WilayahController;
+use App\Http\Controllers\Admin\AdminCustomerController;
+use App\Http\Controllers\Admin\BarcodeScanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,7 +39,6 @@ use App\Http\Controllers\Vendor\OrderController;
 
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\PaymentController;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -148,6 +149,9 @@ Route::middleware(['auth', IsAdmin::class])
 
         Route::post('/barang/print-labels', [BarangController::class, 'printLabels'])->name('barang.printLabels');
 
+        Route::get('/barang/scan-label', [BarcodeScanController::class, 'index'])->name('barang.scanLabel');
+        Route::get('/barang/scan-label/{id}', [BarcodeScanController::class, 'find'])->name('barang.scanFind');
+
         /*
         |--------------------------------------
         | PENJUALAN
@@ -191,6 +195,22 @@ Route::middleware(['auth', IsAdmin::class])
         Route::get('/cities', function () {
             return view('admin.cities');
         })->name('cities');
+
+        /*
+        |--------------------------------------
+        | CUSTOMER
+        |--------------------------------------
+        */
+
+        Route::prefix('customer')->name('customer.')->group(function () {
+            Route::get('/', [AdminCustomerController::class, 'index'])->name('index');
+
+            Route::get('/create-blob', [AdminCustomerController::class, 'createBlob'])->name('createBlob');
+            Route::post('/store-blob', [AdminCustomerController::class, 'storeBlob'])->name('storeBlob');
+
+            Route::get('/create-path', [AdminCustomerController::class, 'createPath'])->name('createPath');
+            Route::post('/store-path', [AdminCustomerController::class, 'storePath'])->name('storePath');
+        });
     });
 
 /*
@@ -227,9 +247,15 @@ Route::middleware(['auth', IsVendor::class])
 
         Route::get('/orders', [OrderController::class, 'index'])
             ->name('orders.index');
+
+        Route::get('/orders/scan-qr', [OrderController::class, 'scanQr'])
+            ->name('orders.scan-qr');
+
+        Route::post('/orders/scan-qr/result', [OrderController::class, 'scanQrResult'])
+            ->name('orders.scan-qr.result');
     });
 
-    /*
+/*
 |--------------------------------------------------------------------------
 | CUSTOMER AREA (GUEST)
 |--------------------------------------------------------------------------

@@ -42,7 +42,7 @@
       </a>
     </li>
 
-    <!-- BARANG + SUBMENU -->
+    <!-- BARANG -->
     <li class="nav-item">
       <a class="nav-link" data-bs-toggle="collapse" href="#barang-menu"
          aria-expanded="{{ Request::is('admin/barang*') ? 'true' : 'false' }}">
@@ -50,31 +50,17 @@
         <i class="menu-arrow"></i>
         <i class="mdi mdi-package-variant menu-icon"></i>
       </a>
-
       <div class="collapse {{ Request::is('admin/barang*') ? 'show' : '' }}" id="barang-menu">
         <ul class="nav flex-column sub-menu">
-
           <li class="nav-item">
-            <a class="nav-link {{ Request::is('admin/barang') ? 'active' : '' }}"
-               href="{{ url('admin/barang') }}">
-               Data Barang
-            </a>
+            <a class="nav-link {{ Request::is('admin/barang') ? 'active' : '' }}" href="{{ url('admin/barang') }}">Data Barang</a>
           </li>
-
           <li class="nav-item">
-            <a class="nav-link {{ Request::is('admin/barang-biasa*') ? 'active' : '' }}"
-               href="{{ url('admin/barang-biasa') }}">
-               Barang (HTML Biasa)
-            </a>
+            <a class="nav-link {{ Request::is('admin/barang-biasa*') ? 'active' : '' }}" href="{{ url('admin/barang-biasa') }}">Barang (HTML Biasa)</a>
           </li>
-
           <li class="nav-item">
-            <a class="nav-link {{ Request::is('admin/barang-datatables*') ? 'active' : '' }}"
-               href="{{ url('admin/barang-datatables') }}">
-               Barang (DataTables)
-            </a>
+            <a class="nav-link {{ Request::is('admin/barang-datatables*') ? 'active' : '' }}" href="{{ url('admin/barang-datatables') }}">Barang (DataTables)</a>
           </li>
-
         </ul>
       </div>
     </li>
@@ -95,7 +81,7 @@
       </a>
     </li>
 
-    <!-- WILAYAH -->
+    <!-- WILAYAH (SUDAH DIPERBAIKI) -->
     <li class="nav-item">
       <a class="nav-link" data-bs-toggle="collapse" href="#wilayah-menu"
          aria-expanded="{{ Request::is('admin/wilayah*') ? 'true' : 'false' }}">
@@ -103,27 +89,55 @@
         <i class="menu-arrow"></i>
         <i class="mdi mdi-map menu-icon"></i>
       </a>
-
       <div class="collapse {{ Request::is('admin/wilayah*') ? 'show' : '' }}" id="wilayah-menu">
         <ul class="nav flex-column sub-menu">
-
           <li class="nav-item">
-            <a class="nav-link {{ Request::is('admin/wilayah/ajax*') ? 'active' : '' }}"
-               href="{{ url('admin/wilayah/ajax') }}">
-               Wilayah (Ajax)
-            </a>
+            <a class="nav-link {{ Request::is('admin/wilayah/ajax*') ? 'active' : '' }}" href="{{ url('admin/wilayah/ajax') }}">Wilayah (Ajax)</a>
           </li>
-
           <li class="nav-item">
-            <a class="nav-link {{ Request::is('admin/wilayah/axios*') ? 'active' : '' }}"
-               href="{{ url('admin/wilayah/axios') }}">
-               Wilayah (Axios)
-            </a>
+            <a class="nav-link {{ Request::is('admin/wilayah/axios*') ? 'active' : '' }}" href="{{ url('admin/wilayah/axios') }}">Wilayah (Axios)</a>
           </li>
-
         </ul>
       </div>
     </li>
 
+    <!-- CUSTOMER -->
+    <li class="nav-item">
+      <a class="nav-link {{ Request::is('admin/customer*') ? '' : 'collapsed' }}" 
+        data-bs-toggle="collapse" 
+        href="#customer-menu" 
+        aria-expanded="{{ Request::is('admin/customer*') ? 'true' : 'false' }}">
+        <span class="menu-title">Customer</span>
+        <i class="menu-arrow"></i>
+        <i class="mdi mdi-account-group menu-icon"></i>
+      </a>
+
+      <div class="collapse {{ Request::is('admin/customer*') ? 'show' : '' }}" id="customer-menu">
+        <ul class="nav flex-column sub-menu">
+
+          <li class="nav-item">
+            
+            <a class="nav-link {{ Request::is('admin/customer') ? 'active' : '' }}"
+              href="{{ route('admin.customer.index') }}">
+              Data Customer
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link {{ Request::is('admin/customer/create-blob') ? 'active' : '' }}"
+              href="{{ route('admin.customer.createBlob') }}">
+              Tambah Customer 1 (BLOB)
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link {{ Request::is('admin/customer/create-path') ? 'active' : '' }}"
+              href="{{ route('admin.customer.createPath') }}">
+              Tambah Customer 2 (FILE)
+            </a>
+          </li>
+        </ul>
+      </div>
+    </li>
   </ul>
 </nav>

@@ -1,30 +1,28 @@
 @extends('layouts.app')
 
-
 @section('title', 'List Barang')
-
 
 @section('content')
   <div class="page-header d-flex justify-content-between align-items-center mb-3">
     <div>
       <h1 class="mb-0">List Barang</h1>
     </div>
-    <div>
+    <div class="d-flex gap-2">
       <a href="{{ route('admin.barang.create') }}" class="btn btn-primary">+ Tambah Barang</a>
+      <a href="{{ route('admin.barang.scanLabel') }}" class="btn btn-success">
+        Scan Barcode
+      </a>
     </div>
   </div>
-
 
   {{-- Flash messages --}}
   @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
   @endif
 
-
   @if(session('error'))
     <div class="alert alert-danger">{{ session('error') }}</div>
   @endif
-
 
   <div class="card">
     <div class="card-body p-3">
@@ -34,15 +32,12 @@
           <button id="clearSelection" type="button" class="btn btn-sm btn-secondary">Bersihkan pilihan</button>
         </div>
 
-
         <div class="d-flex align-items-center">
           <label class="me-2 mb-0">Start X</label>
           <input id="input_start_x" form="printForm" type="number" name="start_x" value="1" min="1" max="5" class="form-control form-control-sm me-3" style="width:90px;">
 
-
           <label class="me-2 mb-0">Start Y</label>
           <input id="input_start_y" form="printForm" type="number" name="start_y" value="1" min="1" max="8" class="form-control form-control-sm me-3" style="width:90px;">
-
 
           <form id="printForm" action="{{ route('admin.barang.printLabels') }}" method="POST" target="_blank" style="display:inline-block;">
             @csrf
@@ -51,13 +46,12 @@
         </div>
       </div>
 
-
       <div class="table-responsive">
         <table id="table-barang" class="table table-striped table-hover mb-0">
           <thead>
             <tr>
-              <th style="width:60px"></th> {{-- kolom checkbox --}}
-              <th style="width:120px">ID</th>
+              <th style="width:60px"></th>
+              <th style="width:140px">ID</th>
               <th>Nama</th>
               <th style="width:140px">Harga</th>
               <th style="width:160px">Dibuat</th>
@@ -70,15 +64,30 @@
                 <td class="align-middle text-center">
                   <input type="checkbox" class="chk" value="{{ $b->id_barang }}" data-id="{{ $b->id_barang }}">
                 </td>
-                <td class="align-middle">{{ $b->id_barang }}</td>
+
+                {{-- BARCODE SAJA YANG DIUBAH --}}
+                <td class="align-middle text-center">
+                  @php
+                      $generator = new \Picqer\Barcode\BarcodeGeneratorSVG();
+                  @endphp
+
+                  <div style="display:inline-block; line-height:0; margin:0 auto 4px;">
+                      {!! $generator->getBarcode((string) $b->id_barang, $generator::TYPE_CODE_128, 1.5, 35) !!}
+                  </div>
+
+                  <div style="font-size:12px; font-weight:600; line-height:1;">
+                      {{ $b->id_barang }}
+                  </div>
+                </td>
+
                 <td class="align-middle">{{ $b->nama }}</td>
                 <td class="align-middle">{{ number_format($b->harga, 0, ',', '.') }}</td>
                 <td class="align-middle">{{ $b->timestamp ? \Carbon\Carbon::parse($b->timestamp)->format('Y-m-d H:i') : '-' }}</td>
+
                 <td class="text-center align-middle">
                   <a href="{{ route('admin.barang.edit', $b->id_barang) }}" class="btn btn-sm btn-outline-warning">
                     Edit
                   </a>
-
 
                   <form action="{{ route('admin.barang.delete', $b->id_barang) }}" method="POST" style="display:inline">
                     @csrf
@@ -108,17 +117,10 @@
   </div>
 @endsection
 
-
-
-
 @push('script-page')
 <script>
-
-
 const STORAGE_KEY = 'selected_barangs';
 
-
-// util: load/save array of ids
 function loadSelected() {
     try {
         return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
@@ -130,8 +132,6 @@ function saveSelected(arr) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
 }
 
-
-// update selection array (add/remove)
 function updateSelection(id, checked) {
     let arr = loadSelected();
     const idx = arr.indexOf(id);
@@ -143,16 +143,12 @@ function updateSelection(id, checked) {
     saveSelected(arr);
 }
 
-
-// sync checkboxes in current DOM page
 function syncCheckboxesInDOM() {
     const selected = loadSelected();
     document.querySelectorAll('.chk').forEach(ch => {
         ch.checked = selected.indexOf(ch.value) !== -1;
     });
 
-
-    // update state of page-level check_all (checked if all visible checked)
     const visible = Array.from(document.querySelectorAll('.chk'));
     if (visible.length > 0) {
         const allChecked = visible.every(c => c.checked);
@@ -162,25 +158,18 @@ function syncCheckboxesInDOM() {
     }
 }
 
-
 document.addEventListener('DOMContentLoaded', function() {
-    // init DataTable
     const table = $('#table-barang').DataTable({
         pageLength: 10,
         ordering: true,
         searching: true,
         lengthChange: true,
-        // jaga supaya DataTable tidak menghancurkan event; kita pakai draw event untuk binding
         drawCallback: function(settings) {
-            // setelah DataTable render, susun state checkbox pada halaman saat ini
             syncCheckboxesInDOM();
 
-
-            // bind change listeners (remove duplicates first)
             document.querySelectorAll('.chk').forEach(ch => {
                 ch.onchange = function() {
                     updateSelection(this.value, this.checked);
-                    // update page-level check_all checkbox
                     const visible = Array.from(document.querySelectorAll('.chk'));
                     const allChecked = visible.length > 0 && visible.every(c => c.checked);
                     document.getElementById('check_all').checked = allChecked;
@@ -189,12 +178,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-
-    // initial sync for first draw
     syncCheckboxesInDOM();
 
-
-    // check_all (halaman)
     document.getElementById('check_all').addEventListener('change', function(e){
         const checked = e.target.checked;
         document.querySelectorAll('.chk').forEach(ch => {
@@ -203,25 +188,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-
-    // bersihkan pilihan
     document.getElementById('clearSelection').addEventListener('click', function(){
         localStorage.removeItem(STORAGE_KEY);
-        // uncheck all checkboxes in DOM
         document.querySelectorAll('.chk').forEach(ch => ch.checked = false);
         document.getElementById('check_all').checked = false;
         alert('Pilihan barang telah dibersihkan.');
     });
 
-
-    // submit form: inject selected[] hidden inputs
     document.getElementById('printForm').addEventListener('submit', function(e){
         const form = this;
 
-
-        // remove previously injected inputs (safety)
         document.querySelectorAll('input[name="selected[]"].injected').forEach(i => i.remove());
-
 
         const selectedIds = loadSelected();
         if (!selectedIds || selectedIds.length === 0) {
@@ -230,8 +207,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
 
-
-        // inject each id as hidden input
         selectedIds.forEach(id => {
             const inp = document.createElement('input');
             inp.type = 'hidden';
@@ -240,13 +215,6 @@ document.addEventListener('DOMContentLoaded', function() {
             inp.classList.add('injected');
             form.appendChild(inp);
         });
-
-
-        // also ensure start_x/start_y are included: inputs already have form="printForm"
-        // (they are outside form tag but bound via form attribute). If you prefer, include inside form.
-
-
-        // allow submit to proceed (PDF opens in new tab due to target="_blank")
     });
 });
 </script>

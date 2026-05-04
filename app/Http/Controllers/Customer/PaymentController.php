@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\DB;
 use Midtrans\Config;
 use Midtrans\Notification;
 use Midtrans\Snap;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\Encoding\Encoding;
 
 class PaymentController extends Controller
 {
@@ -188,20 +191,50 @@ class PaymentController extends Controller
     }
 
     public function success(Request $request)
-    {
-        $orderId = $request->query('order_id');
+        {
+            $orderId = $request->query('order_id');
 
-        if ($orderId) {
-            DB::table('pesanan')
+            if (! $orderId) {
+                return redirect()->route('customer.dashboard')
+                    ->with('error', 'Order ID tidak ditemukan.');
+            }
+
+            $pesanan = DB::table('pesanan')
                 ->where('order_id_midtrans', $orderId)
+                ->first();
+
+            if (! $pesanan) {
+                return redirect()->route('customer.dashboard')
+                    ->with('error', 'Pesanan tidak ditemukan.');
+            }
+
+            DB::table('pesanan')
+                ->where('idpesanan', $pesanan->idpesanan)
                 ->update([
                     'status_bayar' => 1,
                 ]);
 
             session()->forget('cart');
+
+            $qrCode = $this->generateQrCodeDataUri((string) $pesanan->idpesanan);
+
+            return view('customer.payment_success', compact('pesanan', 'qrCode'));
         }
 
-        return redirect()->route('customer.dashboard')
-            ->with('success', 'Pembayaran berhasil dan status pesanan sudah lunas.');
+    private function generateQrCodeDataUri(string $text): string
+    {
+        $builder = new Builder(
+            writer: new PngWriter(),
+            writerOptions: [],
+            validateResult: false,
+            data: $text,
+            encoding: new Encoding('UTF-8'),
+            size: 300,
+            margin: 10,
+        );
+
+        $result = $builder->build();
+
+        return $result->getDataUri();
     }
 }
