@@ -81,7 +81,7 @@
       </a>
     </li>
 
-    <!-- WILAYAH (SUDAH DIPERBAIKI) -->
+    <!-- WILAYAH -->
     <li class="nav-item">
       <a class="nav-link" data-bs-toggle="collapse" href="#wilayah-menu"
          aria-expanded="{{ Request::is('admin/wilayah*') ? 'true' : 'false' }}">
@@ -96,6 +96,36 @@
           </li>
           <li class="nav-item">
             <a class="nav-link {{ Request::is('admin/wilayah/axios*') ? 'active' : '' }}" href="{{ url('admin/wilayah/axios') }}">Wilayah (Axios)</a>
+          </li>
+        </ul>
+      </div>
+    </li>
+
+    <!-- KUNJUNGAN TOKO -->
+    <li class="nav-item">
+      <a class="nav-link {{ Request::is('admin/kunjungan-toko*') ? '' : 'collapsed' }}"
+         data-bs-toggle="collapse"
+         href="#kunjungan-toko-menu"
+         aria-expanded="{{ Request::is('admin/kunjungan-toko*') ? 'true' : 'false' }}">
+        <span class="menu-title">Kunjungan Toko</span>
+        <i class="menu-arrow"></i>
+        <i class="mdi mdi-map-marker-radius menu-icon"></i>
+      </a>
+
+      <div class="collapse {{ Request::is('admin/kunjungan-toko*') ? 'show' : '' }}" id="kunjungan-toko-menu">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item">
+            <a class="nav-link {{ Request::is('admin/kunjungan-toko/list-toko*') ? 'active' : '' }}"
+               href="{{ route('admin.kunjungan_toko.list') }}">
+              List Toko
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link {{ Request::is('admin/kunjungan-toko/titik-kunjungan*') ? 'active' : '' }}"
+               href="{{ route('admin.kunjungan_toko.visit') }}">
+              Titik Kunjungan
+            </a>
           </li>
         </ul>
       </div>
@@ -116,7 +146,6 @@
         <ul class="nav flex-column sub-menu">
 
           <li class="nav-item">
-            
             <a class="nav-link {{ Request::is('admin/customer') ? 'active' : '' }}"
               href="{{ route('admin.customer.index') }}">
               Data Customer

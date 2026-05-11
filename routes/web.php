@@ -26,6 +26,7 @@ use App\Http\Controllers\Admin\PenjualanController;
 use App\Http\Controllers\Admin\WilayahController;
 use App\Http\Controllers\Admin\AdminCustomerController;
 use App\Http\Controllers\Admin\BarcodeScanController;
+use App\Http\Controllers\Admin\KunjunganTokoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -210,6 +211,22 @@ Route::middleware(['auth', IsAdmin::class])
 
             Route::get('/create-path', [AdminCustomerController::class, 'createPath'])->name('createPath');
             Route::post('/store-path', [AdminCustomerController::class, 'storePath'])->name('storePath');
+        });
+
+        /*
+        |--------------------------------------------------------------------------
+        | KUNJUNGAN TOKO
+        |--------------------------------------------------------------------------
+        */
+
+        Route::prefix('kunjungan-toko')->name('kunjungan_toko.')->group(function () {
+            Route::get('/list-toko', [KunjunganTokoController::class, 'listToko'])->name('list');
+            Route::post('/list-toko', [KunjunganTokoController::class, 'storeToko'])->name('store');
+            Route::get('/list-toko/{barcode}/print', [KunjunganTokoController::class, 'printBarcode'])->name('print');
+            Route::get('/list-toko/{barcode}/download-pdf', [KunjunganTokoController::class, 'downloadBarcodePdf'])->name('download_pdf');
+            Route::get('/barcode/{barcode}', [KunjunganTokoController::class, 'getStoreByBarcode'])->name('get-store');
+            Route::get('/titik-kunjungan', [KunjunganTokoController::class, 'titikKunjungan'])->name('visit');
+            Route::post('/titik-kunjungan', [KunjunganTokoController::class, 'submitKunjungan'])->name('visit.submit');
         });
     });
 
