@@ -28,6 +28,8 @@ use App\Http\Controllers\Admin\AdminCustomerController;
 use App\Http\Controllers\Admin\BarcodeScanController;
 use App\Http\Controllers\Admin\KunjunganTokoController;
 
+use App\Http\Controllers\AntrianController;
+
 /*
 |--------------------------------------------------------------------------
 | VENDOR CONTROLLERS
@@ -84,6 +86,18 @@ Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/logout', [LoginController::class, 'logout'])
     ->name('logout')
     ->middleware('auth');
+
+/*
+|--------------------------------------------------------------------------
+| ANTRIAN PUBLIC
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/guest/antrian', [AntrianController::class, 'guestIndex'])->name('guest.antrian.index');
+Route::post('/guest/antrian', [AntrianController::class, 'storeGuest'])->name('guest.antrian.store');
+
+Route::get('/papan-antrian', [AntrianController::class, 'boardIndex'])->name('papan.antrian');
+Route::get('/antrian/snapshot', [AntrianController::class, 'snapshot'])->name('antrian.snapshot');
 
 /*
 |--------------------------------------------------------------------------
@@ -214,6 +228,30 @@ Route::middleware(['auth', IsAdmin::class])
         });
 
         /*
+        |--------------------------------------
+        | ANTRIAN
+        |--------------------------------------
+        */
+
+        Route::prefix('antrian')->name('antrian.')->group(function () {
+
+            Route::get('/', [AntrianController::class, 'adminIndex'])
+                ->name('index');
+
+            Route::post('/{id}/call', [AntrianController::class, 'call'])
+                ->name('call');
+
+            Route::post('/{id}/skip', [AntrianController::class, 'skip'])
+                ->name('skip');
+
+            Route::post('/{id}/recall', [AntrianController::class, 'recall'])
+                ->name('recall');
+
+            Route::post('/{id}/done', [AntrianController::class, 'done'])
+                ->name('done');
+        });
+
+        /*
         |--------------------------------------------------------------------------
         | KUNJUNGAN TOKO
         |--------------------------------------------------------------------------
@@ -228,6 +266,7 @@ Route::middleware(['auth', IsAdmin::class])
             Route::get('/titik-kunjungan', [KunjunganTokoController::class, 'titikKunjungan'])->name('visit');
             Route::post('/titik-kunjungan', [KunjunganTokoController::class, 'submitKunjungan'])->name('visit.submit');
         });
+        
     });
 
 /*

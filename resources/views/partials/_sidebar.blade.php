@@ -131,6 +131,15 @@
       </div>
     </li>
 
+    <!-- ANTRIAN -->
+    <li class="nav-item">
+      <a class="nav-link {{ Request::is('admin/antrian*') ? 'active' : '' }}"
+        href="{{ route('admin.antrian.index') }}">
+        <span class="menu-title">Antrian</span>
+        <i class="mdi mdi-ticket-confirmation menu-icon"></i>
+      </a>
+    </li>
+
     <!-- CUSTOMER -->
     <li class="nav-item">
       <a class="nav-link {{ Request::is('admin/customer*') ? '' : 'collapsed' }}" 

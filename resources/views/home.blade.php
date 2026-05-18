@@ -111,6 +111,18 @@
                                 role="button">
                                 Masuk Sebagai Customer
                                 </a>
+
+                                <a href="{{ route('guest.antrian.index') }}"
+                                class="btn btn-info btn-lg font-weight-medium btn-auth-full"
+                                role="button">
+                                Buka Halaman Guest
+                                </a>
+
+                                <a href="{{ route('papan.antrian') }}"
+                                class="btn btn-secondary btn-lg font-weight-medium btn-auth-full"
+                                role="button">
+                                Buka Papan Antrian
+                                </a>
                             </div>
                         </form>
 
